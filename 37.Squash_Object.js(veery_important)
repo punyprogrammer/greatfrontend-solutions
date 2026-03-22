@@ -1,0 +1,29 @@
+export default function squashObject(obj) {
+  const result = {};
+
+  function helper(current, path) {
+    for (let key in current) {
+      const value = current[key];
+
+      // 🔥 Handle empty key properly
+      let newKey;
+      if (key === "") {
+        newKey = path; // skip empty key
+      } else {
+        newKey = path ? `${path}.${key}` : key;
+      }
+
+      if (
+        typeof value === "object" &&
+        value !== null
+      ) {
+        helper(value, newKey);
+      } else {
+        result[newKey] = value;
+      }
+    }
+  }
+
+  helper(obj, "");
+  return result;
+}
